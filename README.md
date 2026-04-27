@@ -6,22 +6,28 @@
 
 Project này nghiên cứu và so sánh các phương pháp tìm kiếm để giải bài toán định tuyến logistics đa phương thức.
 
-Hệ thống vận chuyển được mô hình hóa bằng đồ thị có hướng ( G(V, E) ):
+Hệ thống vận chuyển được mô hình hóa bằng đồ thị có hướng:
+
+G = (V, E)
+
+Trong đó:
 
 * Đỉnh (node): các địa điểm
 * Cạnh (edge): tuyến vận chuyển giữa các địa điểm
 
 Mỗi cạnh có các thuộc tính:
 
-* Thời gian (time)
-* Chi phí (cost)
-* Phương thức vận chuyển (mode ∈ {road, water, air})
+* time: thời gian
+* cost: chi phí
+* mode ∈ {road, water, air}
 
 ---
 
 ## 2. Mục tiêu bài toán
 
-Tìm đường đi từ điểm bắt đầu ( S ) đến điểm đích ( T ) sao cho tổng chi phí là nhỏ nhất, với hàm mục tiêu:
+Tìm đường đi từ điểm bắt đầu S đến điểm đích T sao cho tổng chi phí là nhỏ nhất.
+
+Hàm mục tiêu:
 
 ```
 Total Cost = Cost + Penalty
@@ -29,22 +35,22 @@ Total Cost = Cost + Penalty
 
 Trong đó:
 
-* Nếu tổng thời gian ( \leq T_{max} ):
+* Nếu tổng thời gian <= Tmax:
 
 ```
 Total Cost = Cost
 ```
 
-* Nếu tổng thời gian ( > T_{max} ):
+* Nếu tổng thời gian > Tmax:
 
 ```
-Total Cost = Cost + P × (time - T_{max})
+Total Cost = Cost + P * (time - Tmax)
 ```
 
 Với:
 
-* ( T_{max} ): thời gian giới hạn (deadline)
-* ( P ): hệ số phạt (penalty)
+* Tmax: thời gian giới hạn (deadline)
+* P: hệ số phạt (penalty)
 
 ---
 
@@ -185,15 +191,15 @@ Các thuật toán được đánh giá dựa trên:
 
 Thay đổi các tham số:
 
-* ( T_{max} )
-* ( P )
+* Tmax
+* P
 
 Quan sát:
 
-* Penalty lớn → ưu tiên đường nhanh
-* Penalty nhỏ → ưu tiên đường rẻ
+* Penalty lớn → ưu tiên đường nhanh (air)
+* Penalty nhỏ → ưu tiên đường rẻ (water)
 
-Điều này thể hiện trade-off giữa thời gian và chi phí.
+Điều này thể hiện trade-off giữa thời gian và chi phí trong bài toán logistics.
 
 ---
 
