@@ -18,9 +18,7 @@ def run_benchmark():
 
     algorithms = [
         ("Brute Force", brute_force),
-        ("Backtracking", backtracking),
-        ("Branch and Bound", branch_and_bound),
-        ("A_star", A_star),
+        ("Backtracking", backtracking)
     ]
 
     results = []
@@ -28,11 +26,11 @@ def run_benchmark():
     for name, algo in algorithms:
         print(f"Running {name}...")
 
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         result = algo(graph, start, target, deadline, penalty)
 
-        end_time = time.time()
+        end_time = time.perf_counter()
         exec_time = end_time - start_time
 
         if result is None:
@@ -46,3 +44,13 @@ def run_benchmark():
             ])
 
     return results
+
+if __name__ == "__main__":
+    results = run_benchmark()
+
+    print("\nBenchmark Results:")
+    print("-" * 60)
+    print(f"{'Algorithm':20} {'Time(s)':10} {'States':10} {'Cost'}")
+
+    for row in results:
+        print(f"{row[0]:20} {row[1]:<10.6f} {row[2]:<10} {row[3]}")
