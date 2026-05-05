@@ -877,3 +877,85 @@ EXPERIMENT_GRAPHS_20 = [{'id': 'G01_small_no_tradeoff',
 
 
 print(len(EXPERIMENT_GRAPHS_20))
+
+MANH_GRAPHS_1 = [{'id': 'G01_thucte',
+  'size_group': 'medium',
+  'tradeoff': False,
+  'nodes': 7,
+  'start': 'Hanoi',
+  'goal': 'HCM',
+  'Tmax': 24,
+  'P': 1,
+  'positions': {
+      'Hanoi': (0, 760),        # Phía Bắc
+      'Haiphong': (100, 750),   # Phía Bắc, hơi lệch về phía Đông (biển)
+      'Hue': (-20, 100),        # Miền Trung, sát phía Bắc Đà Nẵng
+      'Danang': (0, 0),         # Điểm mốc trung tâm
+      'Dong Nai': (-50, -850),  # Phía Nam, cạnh TP.HCM
+      'HCM': (-80, -900),       # Phía Nam
+      'Can Tho': (-150, -1050)  # Cực Nam, lệch về phía Tây (Miền Tây)
+},
+  'graph': {
+    "Hanoi": [
+        ("Haiphong", 0.8, 130, "air"), ("Haiphong", 2.5, 40, "road"), ("Haiphong", 6, 25, "water"),
+        ("Danang", 1.3, 120, "air"), ("Danang", 14, 60, "road"), ("Danang", 16, 35, "water"),
+        ("HCM", 2.1, 155, "air"), ("HCM", 32, 85, "road"), ("HCM", 45, 55, "water"),
+        ("Can Tho", 2.5, 170, "air"), ("Can Tho", 38, 95, "road"), ("Can Tho", 55, 65, "water"),
+        ("Hue", 1.2, 115, "air"), ("Hue", 12, 55, "road"), ("Hue", 15, 30, "water"),
+        ("Dong Nai", 2.1, 150, "air"), ("Dong Nai", 30, 80, "road"), ("Dong Nai", 42, 50, "water")
+    ],
+
+    "HCM": [
+        ("Hanoi", 2.2, 160, "air"), ("Hanoi", 34, 90, "road"), ("Hanoi", 48, 60, "water"),
+        ("Danang", 1.5, 110, "air"), ("Danang", 18, 65, "road"), ("Danang", 22, 40, "water"),
+        ("Haiphong", 2.0, 155, "air"), ("Haiphong", 36, 85, "road"), ("Haiphong", 50, 55, "water"),
+        ("Can Tho", 1.5, 80, "air"), ("Can Tho", 3.5, 35, "road"), ("Can Tho", 8, 20, "water"),
+        ("Hue", 1.5, 115, "air"), ("Hue", 19, 65, "road"), ("Hue", 24, 45, "water"),
+        ("Dong Nai", 1.2, 70, "air"), ("Dong Nai", 1.5, 25, "road"), ("Dong Nai", 3, 15, "water")
+    ],
+
+    "Haiphong": [
+        ("Hanoi", 1.0, 120, "air"), ("Hanoi", 3, 45, "road"), ("Hanoi", 7, 30, "water"),
+        ("HCM", 2.2, 160, "air"), ("HCM", 38, 90, "road"), ("HCM", 52, 60, "water"),
+        ("Danang", 1.4, 125, "air"), ("Danang", 16, 65, "road"), ("Danang", 20, 40, "water"),
+        ("Can Tho", 2.6, 175, "air"), ("Can Tho", 42, 100, "road"), ("Can Tho", 60, 70, "water"),
+        ("Hue", 1.3, 120, "air"), ("Hue", 14, 60, "road"), ("Hue", 18, 35, "water"),
+        ("Dong Nai", 2.2, 155, "air"), ("Dong Nai", 36, 85, "road"), ("Dong Nai", 48, 55, "water")
+    ],
+
+    "Danang": [
+        ("Hanoi", 1.4, 125, "air"), ("Hanoi", 15, 65, "road"), ("Hanoi", 18, 40, "water"),
+        ("HCM", 1.4, 115, "air"), ("HCM", 19, 70, "road"), ("HCM", 24, 45, "water"),
+        ("Haiphong", 1.5, 130, "air"), ("Haiphong", 17, 70, "road"), ("Haiphong", 22, 45, "water"),
+        ("Can Tho", 1.8, 140, "air"), ("Can Tho", 22, 80, "road"), ("Can Tho", 28, 55, "water"),
+        ("Hue", 0.8, 90, "air"), ("Hue", 2.5, 30, "road"), ("Hue", 4, 20, "water"),
+        ("Dong Nai", 1.5, 120, "air"), ("Dong Nai", 18, 70, "road"), ("Dong Nai", 22, 45, "water")
+    ],
+
+    "Can Tho": [
+        ("Hanoi", 2.6, 180, "air"), ("Hanoi", 40, 105, "road"), ("Hanoi", 58, 75, "water"),
+        ("HCM", 1.4, 90, "air"), ("HCM", 3.5, 40, "road"), ("HCM", 8, 25, "water"),
+        ("Danang", 1.8, 135, "air"), ("Danang", 24, 85, "road"), ("Danang", 30, 60, "water"),
+        ("Haiphong", 2.7, 185, "air"), ("Haiphong", 44, 110, "road"), ("Haiphong", 62, 80, "water"),
+        ("Hue", 1.9, 140, "air"), ("Hue", 25, 90, "road"), ("Hue", 32, 65, "water"),
+        ("Dong Nai", 1.6, 100, "air"), ("Dong Nai", 4.5, 45, "road"), ("Dong Nai", 10, 30, "water")
+    ],
+
+    "Hue": [
+        ("Hanoi", 1.2, 120, "air"), ("Hanoi", 13, 60, "road"), ("Hanoi", 16, 35, "water"),
+        ("HCM", 1.6, 120, "air"), ("HCM", 20, 70, "road"), ("HCM", 26, 50, "water"),
+        ("Danang", 0.7, 85, "air"), ("Danang", 2.5, 35, "road"), ("Danang", 4, 20, "water"),
+        ("Haiphong", 1.3, 125, "air"), ("Haiphong", 15, 65, "road"), ("Haiphong", 19, 40, "water"),
+        ("Can Tho", 2.0, 145, "air"), ("Can Tho", 26, 95, "road"), ("Can Tho", 34, 70, "water"),
+        ("Dong Nai", 1.6, 125, "air"), ("Dong Nai", 19, 75, "road"), ("Dong Nai", 24, 50, "water")
+    ],
+
+    "Dong Nai": [
+        ("Hanoi", 2.2, 155, "air"), ("Hanoi", 32, 85, "road"), ("Hanoi", 45, 55, "water"),
+        ("HCM", 1.1, 75, "air"), ("HCM", 1.5, 30, "road"), ("HCM", 3, 20, "water"),
+        ("Danang", 1.6, 115, "air"), ("Danang", 20, 75, "road"), ("Danang", 25, 50, "water"),
+        ("Haiphong", 2.3, 160, "air"), ("Haiphong", 38, 90, "road"), ("Haiphong", 52, 60, "water"),
+        ("Can Tho", 1.7, 110, "air"), ("Can Tho", 5, 50, "road"), ("Can Tho", 11, 35, "water"),
+        ("Hue", 1.7, 120, "air"), ("Hue", 21, 80, "road"), ("Hue", 27, 55, "water")
+    ]
+}}]
