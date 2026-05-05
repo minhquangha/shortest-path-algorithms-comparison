@@ -1,36 +1,14 @@
-from data.sample_graph import get_graph_tradeoff
+from data.experiment_graphs_20_static import EXPERIMENT_GRAPHS_20
 from algorithms.brute_force import brute_force
 from algorithms.backtracking import backtracking
 
-def main():
-    graph = get_graph_tradeoff()
-
-    start = "A"
-    target = "D"
-    deadline = 5
-    penalty = 50
-
+for case in EXPERIMENT_GRAPHS_20:
     result = brute_force(
-        graph,
-        start,
-        target,
-        deadline,
-        penalty
+        graph=case["graph"],
+        start=case["start"],
+        target=case["goal"],
+        deadline=case["Tmax"],
+        penalty=case["P"],
     )
 
-    print("RESULT:")
-    print(result)
-
-    result_2 = backtracking(
-        graph,
-        start,
-        target,
-        deadline,
-        penalty
-    )
-    print("Result for backtrack:")
-    print(result_2)
-
-
-if __name__ == "__main__":
-    main()
+    print(case["id"], result)

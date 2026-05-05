@@ -1,2 +1,2 @@
 def branch_and_bound():
-    passs
+    pass
