@@ -1055,6 +1055,8 @@ def generate_graph_by_level(idx):
 def generate_full_dataset(n=20):
     return [generate_graph_by_level(i) for i in range(1, n + 1)]
 
-
+random.seed(42)  # Đặt seed để đảm bảo kết quả có thể tái tạo
 EXPERIMENT_GRAPHS_20 = generate_full_dataset(20)
-print(EXPERIMENT_GRAPHS_20)
+# print(EXPERIMENT_GRAPHS_20)
+# for graph in EXPERIMENT_GRAPHS_20:
+#     print(graph['id'], graph['size_group'], graph['tradeoff'], graph['nodes'])
