@@ -1,6 +1,7 @@
 from algorithms.utils import compute_total_cost
 def branch_and_bound(graph, start, target, deadline, penalty):
     best_result = None
+    states_visited = 0
     import heapq
     def dijkstra_min_time(graph, start):
         dist = {node: float('inf') for node in graph}
@@ -48,8 +49,8 @@ def branch_and_bound(graph, start, target, deadline, penalty):
         estimated_cost = cost_so_far + min_cost_to_target.get(current_node, float('inf'))
         return compute_total_cost(estimated_time, estimated_cost, deadline, penalty)
     def backtrack(current_node, time_so_far, cost_so_far, path):
-        nonlocal best_result
-        
+        nonlocal best_result, states_visited
+        states_visited += 1
         current_total_cost = compute_total_cost(time_so_far, cost_so_far, deadline, penalty)
         if best_result is not None and bound(current_node, time_so_far, cost_so_far) >= best_result["total_cost"]:
             return
@@ -60,7 +61,7 @@ def branch_and_bound(graph, start, target, deadline, penalty):
                     "time": time_so_far,
                     "cost": cost_so_far,
                     "total_cost": current_total_cost,
-                    "states_visited": len(path) // 2 + 1
+                    "states_visited": states_visited
                 }
         for neighbor, time, cost, mode in graph.get(current_node, []):
             if neighbor not in path:
