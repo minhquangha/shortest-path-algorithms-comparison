@@ -3,6 +3,13 @@ def branch_and_bound(graph, start, target, deadline, penalty):
     best_result = None
     states_visited = 0
     import heapq
+    # Kiểm tra nếu start hoặc target không tồn tại trong graph
+    all_nodes = set(graph.keys())
+    for u in graph:
+        for v, _, _, _ in graph.get(u, []):
+            all_nodes.add(v)
+    if start not in all_nodes or target not in all_nodes:
+        return None
     def dijkstra_min_time(graph, start):
         dist = {node: float('inf') for node in graph}
         dist[start] = 0
@@ -44,6 +51,9 @@ def branch_and_bound(graph, start, target, deadline, penalty):
     reverse_g = reverse_graph(graph)
     min_time_to_target = dijkstra_min_time(reverse_g, target)
     min_cost_to_target = dijkstra_min_cost(reverse_g, target)
+    # Dừng sớm khi không có đường đi từ start đến target
+    if min_time_to_target.get(start, float('inf')) == float('inf'):
+        return None
     def bound(current_node, time_so_far, cost_so_far):
         estimated_time = time_so_far + min_time_to_target.get(current_node, float('inf'))
         estimated_cost = cost_so_far + min_cost_to_target.get(current_node, float('inf'))
