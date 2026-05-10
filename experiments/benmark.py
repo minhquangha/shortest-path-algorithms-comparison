@@ -39,6 +39,12 @@ def run_benchmark():
         penalty = case["P"]
 
         for algorithm_name, algorithm_fn in ALGORITHMS:
+            if algorithm_name == "Brute Force" and case["nodes"] > 15:
+                print(
+                    f"Skipping {algorithm_name} on {case['id']} (nodes={case['nodes']})"
+                )
+                continue
+
             print(f"Running {algorithm_name} on {case['id']}...")
 
             t0 = perf_counter()
