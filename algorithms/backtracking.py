@@ -3,7 +3,7 @@ from algorithms.utils import compute_total_cost
 def backtracking(graph, start, target, deadline, penalty):
     best_result = None
     states_visited = 0
-    
+
     def dfs(current_node, time_so_far, cost_so_far, path):
         nonlocal best_result, states_visited
 
