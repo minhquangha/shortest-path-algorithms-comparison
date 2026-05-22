@@ -1,40 +1,33 @@
-import heapq
-from collections import defaultdict
+def a_star(graph, start, target, Tmax):
 
+    import heapq
+    from collections import defaultdict
 
-def build_reverse_graph(graph):
-    """Xây đồ thị ngược để chạy Dijkstra từ target."""
-    reverse = defaultdict(list)
-    for u, neighbors in graph.items():
-        for (v, t, c, mode) in neighbors:
-            reverse[v].append((u, t, c, mode))
-    return reverse
+    def build_reverse_graph(graph):
+        """Xây đồ thị ngược để chạy Dijkstra từ target."""
+        reverse = defaultdict(list)
+        for u, neighbors in graph.items():
+            for (v, t, c, mode) in neighbors:
+                reverse[v].append((u, t, c, mode))
+        return reverse
 
-
-def dijkstra_reverse(graph, target):
-    """
-    Dijkstra ngược từ target, trả về dict h[v] = min cost từ v đến target.
-    Dùng làm heuristic cho A* (admissible vì là chi phí thực tối thiểu).
-    """
-    reverse_graph = build_reverse_graph(graph)
-
-    dist = {}  # dist[v] = min cost từ v -> target
-    heap = [(0, target)]  # (cost, node)
-
-    while heap:
-        cost, node = heapq.heappop(heap)
-        if node in dist:
-            continue
-        dist[node] = cost
-
-        for (prev, t, c, mode) in reverse_graph.get(node, []):
-            if prev not in dist:
-                heapq.heappush(heap, (cost + c, prev))
-
-    return dist
-
-
-def A_star(graph, start, target, Tmax):
+    def dijkstra_reverse(graph, target):
+        """
+        Dijkstra ngược từ target, trả về dict h[v] = min cost từ v đến target.
+        Dùng làm heuristic cho A* (admissible vì là chi phí thực tối thiểu).
+        """
+        reverse_graph = build_reverse_graph(graph)
+        dist = {}  # dist[v] = min cost từ v -> target
+        heap = [(0, target)]  # (cost, node)
+        while heap:
+            cost, node = heapq.heappop(heap)
+            if node in dist:
+                continue
+            dist[node] = cost
+            for (prev, t, c, mode) in reverse_graph.get(node, []):
+                if prev not in dist:
+                    heapq.heappush(heap, (cost + c, prev))
+        return dist
     """
     A* tìm đường từ start đến target:
       - Tối thiểu hoá cost
