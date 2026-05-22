@@ -37,3 +37,14 @@ def backtracking(graph, start, target, deadline, penalty):
 
     dfs(start, 0, 0, [start])
     return best_result
+
+# if __name__ == "__main__":
+#     graph = {
+#     'A': [('B', 1, 10, 'car'), ('C', 4, 20, 'bus')],
+#     'B': [('C', 2, 15, 'car'), ('D', 5, 30, 'train')],
+#     'C': [('D', 1, 5, 'bike')],
+#     'D': []
+# }
+
+#     result = backtracking(graph, 'A', 'D', deadline=10, penalty=0)
+#     print(result)
