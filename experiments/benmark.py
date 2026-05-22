@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from data.experiment_graphs_20_static import EXPERIMENT_GRAPHS_20
+from data.experiment_graphs import EXPERIMENT_GRAPHS_20
 from algorithms.brute_force import brute_force
 from algorithms.backtracking import backtracking
 from algorithms.branch_and_bound import branch_and_bound

@@ -12,7 +12,7 @@ def plot_accuracy():
         return
 
     df = pd.read_csv(CSV_PATH)
-
+    
     # Calculate accuracy as percentage
     if 'solve_rate' in df.columns:
         df['accuracy'] = df['solve_rate'] * 100
@@ -23,10 +23,10 @@ def plot_accuracy():
         return
 
     plt.figure(figsize=(8, 6))
-
+    
     # Draw bar chart
     bars = plt.bar(df['algorithm'], df['accuracy'], color=['#4C72B0', '#DD8452', '#55A868', '#C44E52'])
-
+    
     # Add values on top of bars
     for bar in bars:
         yval = bar.get_height()
@@ -39,7 +39,7 @@ def plot_accuracy():
     plt.xticks(rotation=15, ha='right')
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.tight_layout()
-
+    
     OUTPUT_PNG.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(OUTPUT_PNG, dpi=300, bbox_inches="tight")
     print(f"Đã lưu biểu đồ tại: {OUTPUT_PNG}")
