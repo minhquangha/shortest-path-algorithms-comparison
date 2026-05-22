@@ -1,83 +1,123 @@
-# Tối ưu định tuyến logistics đa phương thức với penalty thời gian
+# Tối ưu định tuyến logistics đa phương thức
 
----
+## 1. Giới thiệu
 
-## 1. Giới thiệu bài toán
+Project này giải bài toán tìm đường đi tối ưu trong mạng logistics đa phương thức.
 
-Project này nghiên cứu và so sánh các phương pháp tìm kiếm để giải bài toán định tuyến logistics đa phương thức.
+Mạng vận chuyển được mô hình hóa bằng đồ thị có hướng:
 
-Hệ thống vận chuyển được mô hình hóa bằng đồ thị có hướng:
-
+```text
 G = (V, E)
+```
 
 Trong đó:
 
-* Đỉnh (node): các địa điểm
-* Cạnh (edge): tuyến vận chuyển giữa các địa điểm
+- `V`: tập các địa điểm, ví dụ kho hàng, trạm trung chuyển, điểm giao hàng.
+- `E`: tập các tuyến vận chuyển giữa các địa điểm.
 
-Mỗi cạnh có các thuộc tính:
+Mỗi cạnh trong đồ thị có dạng:
 
-* time: thời gian
-* cost: chi phí
-* mode ∈ {road, water, air}
+```text
+(neighbor, time, cost, mode)
+```
+
+Trong đó:
+
+- `neighbor`: đỉnh kề.
+- `time`: thời gian vận chuyển.
+- `cost`: chi phí vận chuyển.
+- `mode`: phương thức vận tải, gồm `road`, `air`, `ship`.
 
 ---
 
 ## 2. Mục tiêu bài toán
 
-Tìm đường đi từ điểm bắt đầu S đến điểm đích T sao cho tổng chi phí là nhỏ nhất.
+Tìm đường đi từ đỉnh xuất phát `A` đến đỉnh đích `T` sao cho:
+
+- Tổng chi phí vận chuyển là nhỏ nhất.
+- Tổng thời gian không vượt quá deadline `Tmax`.
 
 Hàm mục tiêu:
 
-```
-Total Cost = Cost + Penalty
-```
-
-Trong đó:
-
-* Nếu tổng thời gian <= Tmax:
-
-```
-Total Cost = Cost
+```text
+min cost(P)
 ```
 
-* Nếu tổng thời gian > Tmax:
+Ràng buộc thời gian:
 
+```text
+time(P) <= Tmax
 ```
-Total Cost = Cost + P * (time - Tmax)
-```
 
-Với:
-
-* Tmax: thời gian giới hạn (deadline)
-* P: hệ số phạt (penalty)
+Một đường đi chỉ được xem là hợp lệ nếu thỏa mãn deadline trên.
 
 ---
 
-## 3. Các thuật toán sử dụng
+## 3. Dữ liệu thực nghiệm
 
-Các phương pháp được triển khai và so sánh:
+Bộ dữ liệu được sinh tự động để phục vụ so sánh thuật toán.
 
-* Brute Force (vét cạn)
-* Backtracking (quay lui có cắt nhánh)
-* Branch and Bound (nhánh cận)
-* A* Search (tìm kiếm heuristic)
+Đặc điểm chính:
+
+- Số node tăng từ 5 đến 50.
+- Bước tăng là 5 node.
+- Mỗi kích thước sinh 3 đồ thị.
+- Tổng cộng có 30 đồ thị.
+- Sử dụng `random.seed(42)` để có thể tái lập kết quả.
+
+Các nhóm dữ liệu:
+
+| Nhóm | Số node | Mật độ cạnh |
+|---|---:|---|
+| small | 5--15 | low |
+| medium | 20--35 | medium |
+| large | 40--50 | high |
+
+Các phương thức vận tải:
+
+| Mode | Time | Cost | Ý nghĩa |
+|---|---:|---:|---|
+| road | 5--12 | 10--60 | Rẻ hơn nhưng chậm hơn |
+| air | 1--4 | 150--350 | Nhanh nhất nhưng đắt nhất |
+| ship | 3--8 | 60--180 | Trung gian giữa road và air |
 
 ---
 
-## 4. Cấu trúc project
+## 4. Các thuật toán sử dụng
 
-```
+Project triển khai và so sánh 5 thuật toán:
+
+1. **Brute Force**
+   Liệt kê tất cả đường đi từ `A` đến `T`, sau đó chọn đường hợp lệ có chi phí nhỏ nhất.
+
+2. **Backtracking**
+   Duyệt các đường đi có cắt nhánh khi tổng thời gian vượt quá `Tmax`.
+
+3. **Dynamic Programming**
+   Lưu chi phí nhỏ nhất theo trạng thái `dp[v][t]`, trong đó `v` là đỉnh hiện tại và `t` là tổng thời gian đã dùng.
+
+4. **Ant Colony Optimization**
+   Mô phỏng hành vi tìm đường của đàn kiến để tìm lời giải tốt trên không gian tìm kiếm lớn.
+
+5. **A\* Search**
+   Sử dụng heuristic để định hướng quá trình tìm kiếm đường đi tối ưu.
+
+---
+
+## 5. Cấu trúc project
+
+```text
 logistics-routing-optimization/
 │
 ├── data/
 │   ├── sample_graph.py
-│   ├── config_data.py
+│   └── config_data.py
 │
 ├── algorithms/
 │   ├── brute_force.py
 │   ├── backtracking.py
-│   ├── branch_and_bound.py
+│   ├── dynamic_programming.py
+│   ├── aco.py
 │   ├── astar.py
 │   └── utils.py
 │
@@ -94,85 +134,47 @@ logistics-routing-optimization/
 
 ---
 
-## 5. Flow hoạt động
+## 6. Quy trình thực hiện
 
-Quy trình thực hiện project:
-
-```
-data → algorithms → experiments → visualization → report
+```text
+data -> algorithms -> experiments -> visualization -> report
 ```
 
-Chi tiết:
+Trong đó:
 
-1. data
-   Tạo và quản lý dữ liệu đầu vào (graph)
-
-2. algorithms
-   Cài đặt các thuật toán tìm đường
-
-3. experiments
-   Chạy benchmark và thu thập kết quả
-
-4. visualization
-   Vẽ biểu đồ từ dữ liệu benchmark
-
-5. report
-   Phân tích và đưa ra kết luận
+- `data`: sinh và quản lý đồ thị đầu vào.
+- `algorithms`: cài đặt các thuật toán tìm đường.
+- `experiments`: chạy benchmark và lưu kết quả.
+- `visualization`: vẽ biểu đồ so sánh.
+- `report`: phân tích và rút ra kết luận.
 
 ---
 
-## 6. Định dạng dữ liệu
+## 7. Cách chạy chương trình
 
-Graph được biểu diễn dưới dạng adjacency list:
+Cài đặt thư viện:
 
-```
-(node) → [(neighbor, time, cost, mode)]
-```
-
-Ví dụ:
-
-```
-A → [(B, 2, 100, road), (C, 6, 50, water)]
-```
-
----
-
-## 7. Hướng dẫn chạy chương trình
-
-### 7.1 Cài đặt môi trường
-
-Nếu sử dụng uv:
-
-```
-uv sync
-```
-
-Hoặc:
-
-```
+```bash
 pip install matplotlib pandas
 ```
 
----
+Hoặc nếu dùng `uv`:
 
-### 7.2 Chạy thử thuật toán
-
+```bash
+uv sync
 ```
+
+Chạy chương trình chính:
+
+```bash
 python main.py
 ```
 
----
+Chạy benchmark:
 
-### 7.3 Chạy benchmark
-
-```
+```bash
 python experiments/benchmark.py
 ```
-
-Kết quả:
-
-* In ra màn hình
-* Lưu vào file CSV để phục vụ phân tích
 
 ---
 
@@ -180,45 +182,23 @@ Kết quả:
 
 Các thuật toán được đánh giá dựa trên:
 
-* Thời gian chạy (execution time)
-* Số trạng thái duyệt (states visited)
-* Tổng chi phí (total cost)
-* Độ chính xác (so với brute force)
+- Tổng chi phí tìm được.
+- Tổng thời gian của lộ trình.
+- Thời gian chạy.
+- Số trạng thái đã duyệt.
+- Khả năng tìm được đường đi hợp lệ.
+- Độ chính xác so với nghiệm tối ưu hoặc baseline.
+
+Brute Force thường được dùng làm baseline vì có thể tìm nghiệm tối ưu trên đồ thị nhỏ.
 
 ---
 
-## 9. Ý nghĩa thực nghiệm
+## 9. Kết luận
 
-Thay đổi các tham số:
+Project giúp so sánh nhiều chiến lược tìm kiếm trong bài toán định tuyến logistics đa phương thức có ràng buộc thời gian.
 
-* Tmax
-* P
+Bài toán thể hiện rõ trade-off giữa thời gian và chi phí:
 
-Quan sát:
-
-* Penalty lớn → ưu tiên đường nhanh (air)
-* Penalty nhỏ → ưu tiên đường rẻ (water)
-
-Điều này thể hiện trade-off giữa thời gian và chi phí trong bài toán logistics.
-
----
-
-## 10. Giới hạn bài toán
-
-* Số node nhỏ (5–10)
-* Không xét bài toán đa mục tiêu phức tạp
-* Tập trung vào so sánh phương pháp
-
----
-
-## 11. Kết luận
-
-Project giúp:
-
-* Hiểu và so sánh các chiến lược tìm kiếm
-* Phân tích hiệu quả thuật toán trong bài toán thực tế
-* Đánh giá trade-off giữa thời gian và chi phí
-
-Brute Force được sử dụng làm baseline để đánh giá độ chính xác của các phương pháp khác.
-
----
+- Đường rẻ nhất có thể không hợp lệ nếu vượt quá `Tmax`.
+- Đường nhanh hơn có thể có chi phí cao hơn.
+- Thuật toán cần tìm đường đi hợp lệ có chi phí nhỏ nhất.
