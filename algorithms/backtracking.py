@@ -1,4 +1,4 @@
-def backtracking(graph, start, target, deadline, penalty):
+def backtracking(graph, start, target, deadline):
     best_result = None
     states_visited = 0
 
