@@ -65,8 +65,24 @@ def summarize_runtime_by_nodes(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def plot_runtime(summary: pd.DataFrame) -> None:
-    plt.figure(figsize=(11, 6))
+    plt.figure(figsize=(12, 6.5))
     nodes_sorted = sorted(summary["nodes"].dropna().unique())
+
+    # Map color and marker styles for consistency and visual clarity
+    color_map = {
+        "A*": '#4C72B0',
+        "Backtracking": '#DD8452',
+        "ACO": '#55A868',
+        "DP": '#C44E52',
+        "Brute Force": '#8172B3'
+    }
+    marker_map = {
+        "A*": 'o',
+        "Backtracking": 's',
+        "ACO": '^',
+        "DP": 'd',
+        "Brute Force": 'X'
+    }
 
     for algorithm_name, _ in ALGORITHMS:
         algo_df = summary[summary["algorithm"] == algorithm_name].copy()
@@ -75,19 +91,29 @@ def plot_runtime(summary: pd.DataFrame) -> None:
         plt.plot(
             nodes_sorted,
             algo_df["mean_time_s"].tolist(),
-            marker="o",
-            linewidth=2,
-            markersize=6,
+            marker=marker_map.get(algorithm_name, 'o'),
+            linewidth=2.5,
+            markersize=7,
             label=algorithm_name,
+            color=color_map.get(algorithm_name)
         )
 
-    plt.xlabel("Số node")
-    plt.ylabel("Thời gian chạy trung bình (giây)")
-    plt.title("So sánh thời gian chạy trung bình theo số node")
-    plt.xticks(nodes_sorted)
+    plt.xlabel("Số node (Quy mô đồ thị, thang Log)", fontsize=12, fontweight='bold', labelpad=10)
+    plt.ylabel("Thời gian chạy trung bình (giây, thang Log)", fontsize=12, fontweight='bold', labelpad=10)
+    plt.title("So sánh thời gian chạy trung bình theo số node", fontsize=14, fontweight='bold', pad=15)
+    
+    # Use logarithmic scale for X-axis because of wide-ranging node sizes (5 to 500)
+    plt.xscale("log")
     plt.yscale("log")
+    
+    # Custom formatting for log X-axis ticks to display actual node sizes
+    plt.xticks(nodes_sorted, labels=[str(int(n)) for n in nodes_sorted], fontsize=10)
+    plt.yticks(fontsize=10)
+    
+    # Double-grid lines for easy log reading
     plt.grid(True, which="both", linestyle="--", alpha=0.4)
-    plt.legend()
+    
+    plt.legend(fontsize=10, loc="lower right", framealpha=0.9, facecolor='white', edgecolor='#ddd')
     plt.tight_layout()
 
     PLOT_PATH.parent.mkdir(parents=True, exist_ok=True)

@@ -164,25 +164,31 @@ def theoretical_complexity_log10(
     tmax = max(1, int(case["Tmax"]))
 
     if algorithm_name == "Brute Force":
-        return log10_factorial(max(int(case["nodes"]) - 1, 1))
+        return log10_factorial(n)
 
-    if algorithm_name in {"Backtracking", "A*"}:
+    if algorithm_name == "Backtracking":
         return depth * math.log10(max_b)
 
+    if algorithm_name == "A*":
+        # O((V + E) log V + V * Tmax * log(V * Tmax))
+        val = (n + e) * math.log2(max(2.0, n)) + n * tmax * math.log2(max(2.0, n * tmax))
+        return math.log10(max(1.0, val))
+
     if algorithm_name == "ACO":
-        ants = min(n, 50)
-        iterations = max(100, n * 5)
-        # Upper bound theo cấu trúc vòng lặp của ACO
+        ants = min(n, 50)  # K
+        iterations = max(100, n * 5)  # I
+        # O(I * K * V * D)
         return (
-            math.log10(ants)
-            + math.log10(iterations)
-            + math.log10(e)
+            math.log10(iterations)
+            + math.log10(ants)
+            + math.log10(n)
             + math.log10(depth)
         )
 
     if algorithm_name == "DP":
-        # Xấp xỉ theo số trạng thái (node, time) và số cạnh
-        return math.log10(n) + math.log10(tmax + 1) + math.log10(e)
+        # O(Tmax * (V + E))
+        val = tmax * (n + e)
+        return math.log10(max(1.0, val))
 
     raise ValueError(f"Unknown algorithm: {algorithm_name}")
 
@@ -202,6 +208,9 @@ def run_benchmark() -> pd.DataFrame:
 
         for algorithm_name, algorithm_fn in ALGORITHMS:
             if algorithm_name == "Brute Force" and nodes > 15:
+                continue
+
+            if algorithm_name == "Backtracking" and nodes > 50:
                 continue
 
             print(f"Running {algorithm_name} on {case['id']}...")
