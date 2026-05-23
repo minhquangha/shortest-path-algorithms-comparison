@@ -17,16 +17,21 @@ def aco(graph, start, target, deadline,
         for v, t, c, m in graph[u]:
             pheromone[(u, v)] = 1.0
 
+    states_visited = 0
+
     # Heuristic ưu tiên đường có chi phí thấp
     def heuristic(cost):
         return 1.0 / (cost + 1e-6)
 
     def construct_route():
+        nonlocal states_visited
         current = start
         route = [start]
         total_time = 0
         total_cost = 0
         visited = set()
+        
+        states_visited += 1
         
         while current != target:
             visited.add(current)
@@ -62,6 +67,7 @@ def aco(graph, start, target, deadline,
             total_time += time
             total_cost += cost
             current = nei
+            states_visited += 1
             
         return route, total_time, total_cost
 
@@ -99,7 +105,7 @@ def aco(graph, start, target, deadline,
                     "time": time,
                     "cost": cost,
                     "total_cost": cost,
-                    "states_visited": 0,
+                    "states_visited": states_visited,
                 }
                 best_cost = cost
                 iterations_without_improvement = 0 # Reset bộ đếm khi tìm thấy kỷ lục mới
@@ -116,5 +122,8 @@ def aco(graph, start, target, deadline,
         # Cập nhật Elitist: Chỉ cho những kiến đi tới đích nhả pheromone, 
         for route, cost in solutions:
             deposit(route, cost)
+
+    if best_result is not None:
+        best_result["states_visited"] = states_visited
 
     return best_result
