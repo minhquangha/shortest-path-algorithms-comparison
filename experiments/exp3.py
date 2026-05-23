@@ -246,6 +246,60 @@ def plot_complexity_combined(summary: pd.DataFrame) -> None:
             ax.grid(True, which="both", linestyle="--", alpha=0.4)
             ax.legend(fontsize=9, loc="best", framealpha=0.9)
 
+        # --- Save Individual 1x2 Plot ---
+        fig_ind, axes_ind = plt.subplots(1, 2, figsize=(15, 6))
+        ax_act_ind = axes_ind[0]
+        ax_the_ind = axes_ind[1]
+
+        ax_act_ind.plot(
+            algo_nodes,
+            algo_df["mean_actual_complexity_log10"].tolist(),
+            marker=marker,
+            linewidth=2.5,
+            markersize=7,
+            label="Thuc te (Actual)",
+            color=color
+        )
+        ax_act_ind.set_ylabel("log10(actual)", fontsize=10, fontweight='bold')
+        ax_act_ind.set_xlabel("So node", fontsize=10, fontweight='bold', labelpad=6)
+        ax_act_ind.set_title(f"{algorithm_name} - Thuc te", fontsize=11, fontweight='bold', pad=8)
+
+        ax_the_ind.plot(
+            algo_nodes,
+            algo_df["mean_theoretical_complexity_log10"].tolist(),
+            marker=marker,
+            linewidth=2.5,
+            markersize=7,
+            linestyle="--",
+            label=f"Ly thuyet: {formula}",
+            color=color
+        )
+        ax_the_ind.set_ylabel("log10(theoretical)", fontsize=10, fontweight='bold')
+        ax_the_ind.set_xlabel("So node", fontsize=10, fontweight='bold', labelpad=6)
+        ax_the_ind.set_title(f"{algorithm_name} - Ly thuyet {formula}", fontsize=11, fontweight='bold', pad=8)
+
+        for ax in (ax_act_ind, ax_the_ind):
+            ax.set_xscale("log")
+            ax.set_xticks(algo_nodes)
+            ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
+            ax.set_xticklabels([str(int(n)) for n in algo_nodes], fontsize=9)
+            ax.grid(True, which="both", linestyle="--", alpha=0.4)
+            ax.legend(fontsize=9, loc="best", framealpha=0.9)
+
+        fig_ind.suptitle(f"So sanh do phuc tap - {algorithm_name}", fontsize=13, fontweight='bold', y=0.98)
+        fig_ind.tight_layout()
+
+        fn_map = {
+            "A*": "complexity_astar.png",
+            "Backtracking": "complexity_backtracking.png",
+            "Brute Force": "complexity_brute_force.png",
+            "DP": "complexity_dp.png",
+            "ACO": "complexity_aco.png"
+        }
+        ind_path = ROOT_DIR / "visualization" / fn_map[algorithm_name]
+        fig_ind.savefig(ind_path, dpi=200, bbox_inches="tight")
+        plt.close(fig_ind)
+
     fig.suptitle(
         "Phan tich do phuc tap tung thuat toan (Thuc te vs Ly thuyet)",
         fontsize=15, fontweight='bold', y=0.995
