@@ -210,8 +210,8 @@ def run_benchmark() -> pd.DataFrame:
             if algorithm_name == "Brute Force" and nodes > 15:
                 continue
 
-            if algorithm_name == "Backtracking" and nodes > 50:
-                continue
+            # if algorithm_name == "Backtracking" and nodes > 50:
+            #     continue
 
             print(f"Running {algorithm_name} on {case['id']}...")
 
